@@ -7,7 +7,7 @@ resources:
     type: GitRepo
     configuration:
       path: neha-mishraa/test-hookhandler
-      gitProvider: github
+      gitProvider: github_neha
       branches:
         include: {{gitBranch}}
   {{ end }}
