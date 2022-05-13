@@ -3,7 +3,7 @@ valuesFilePath: ./values.yml
 
 resources:
   {{ range $i, $e := until 1 }}
-  - name: git{{$i}}
+  - name: git_{{$i}}
     type: GitRepo
     configuration:
       path: neha-mishraa/test-hookhandler
@@ -12,7 +12,7 @@ resources:
         include: {{gitBranch}}
   {{ end }}
 pipelines:
-  - name: pipe
+  - name: pipe_
     steps:
       - name: first
         type: Bash
@@ -29,7 +29,7 @@ pipelines:
           runtime:
             type: host
           inputResources:
-            - name: git{{$i}}
+            - name: git_{{$i}}
           inputSteps:
             - name: first
         execution:
