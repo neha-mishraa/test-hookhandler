@@ -1,0 +1,50 @@
+template: true
+valuesFilePath: ./values.yml
+
+resources:
+  {{ range $i, $e := until 1 }}
+  - name: git{{$i}}
+    type: GitRepo
+    configuration:
+      path: neha-mishraa/test-hookhandler
+      gitProvider: github
+      branches:
+        include: {{gitBranch}}
+  {{ end }}
+pipelines:
+  - name: pipe
+    steps:
+      - name: first
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+        execution:
+          onExecute:
+            - echo foo
+      {{ range $i, $e := until 1 }}
+      - name: step{{$i}}
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          inputResources:
+            - name: git{{$i}}
+          inputSteps:
+            - name: first
+        execution:
+          onExecute:
+            - echo foo
+      {{ end }}
+      - name: last
+        type: Bash
+        configuration:
+          runtime:
+            type: host
+          inputSteps:
+            {{ range $i, $e := until 1 }}
+            - name: step{{$i}}
+            {{ end }}
+        execution:
+          onExecute:
+            - echo foo
